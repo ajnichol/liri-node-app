@@ -1,30 +1,75 @@
-//dont forget to require spotify and request omdb!!!
+//dont forget to request omdb!!!
 
 var keysExport = require("./keys.js");
 
 var keysData = keysExport.twitterKeys;
 
-var keysTwitter = keysExport.Twitter;
-
 var request = require("request");
 
-var commandArgs = process.argv[2];
+var firstCmndArg = process.argv[2];
 
-var params = {screen_name: 'AlexnBtcmp'};
+var secondCmndArg = process.argv[3];
 
-keysData.get('statuses/user_timeline', params, function(error, tweets, response) {
+if(firstCmndArg === "my-tweets") {
 
-  if (error) {
-    console.log(error);
-  }
+	var params = {screen_name: 'AlexnBtcmp'};
+	//Twitter request
+	keysData.get('statuses/user_timeline', params, function(error, tweets, response) {
 
-  if(commandArgs === "my-tweets") {
-  	for(var prop in tweets){
-  		console.log(tweets[prop].created_at + " " + tweets[prop].text);
-	};
-  }else{
-  	console.log("WRONG INPUT");
-  	}
+	  if (error) {
+	    console.log(error);
+	  }
 
-});
+	  for(var twitProp in tweets){
+	  		console.log(tweets[twitProp].created_at + " " + tweets[twitProp].text);
+		}
+
+	});
+}
+
+if(firstCmndArg === "spotify-this-song") {
+
+	var Spotify = require("spotify");
+
+	// if(secondCmndArg === null) {
+	// 	secondCmndArg = "The Sign";
+	// }
+	//Spotify request
+	Spotify.search({type: "track", query: secondCmndArg}, function(error, data){
+
+		if(error){
+			console.log(error);
+		}
+
+		for(var spotProp in data) {
+			console.log("Artist: " + data.tracks.items[0].artists[0].name);
+			console.log("Song: " + data.tracks.items[0].name);
+			console.log("Link: " + data.tracks.items[0].preview_url);
+			console.log("Album: " + data.tracks.items[0].album.name);
+		}
+	});
+}
+
+else if(firstCmndArg === "spotify-this-song" && secondCmndArg === null){
+
+	secondCmndArg = "The Sign";
+
+	Spotify.search({type: "track", query: secondCmndArg}, function(error, data){
+
+		if(error){
+			console.log(error);
+		}
+
+		for(var spotProp in data) {
+			console.log("Artist: " + data.tracks.items[0].artists[0].name);
+			console.log("Song: " + data.tracks.items[0].name);
+			console.log("Link: " + data.tracks.items[0].preview_url);
+			console.log("Album: " + data.tracks.items[0].album.name);
+		}
+	});
+}
+
+// else{
+// 	console.log("WRONG INPUT");
+// }
 

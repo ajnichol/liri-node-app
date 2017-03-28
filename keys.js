@@ -1,8 +1,6 @@
 
 var Twitter = require("twitter");
 
-exports.Twitter;
-
 exports.twitterKeys = new Twitter({
   consumer_key: 'gX5TuBdEbL5gGgcosl31QYtB4',
   consumer_secret: 'drIIajkQ2JBM1uAFUvclWWGwagEVnVOHFfyHb6GekLmgVUiN61',
