@@ -27,13 +27,9 @@ if(firstCmndArg === "my-tweets") {
 	});
 }
 
-if(firstCmndArg === "spotify-this-song") {
+if(firstCmndArg === "spotify-this-song" && secondCmndArg !== undefined) {
 
 	var Spotify = require("spotify");
-
-	// if(secondCmndArg === null) {
-	// 	secondCmndArg = "The Sign";
-	// }
 	//Spotify request
 	Spotify.search({type: "track", query: secondCmndArg}, function(error, data){
 
@@ -50,21 +46,25 @@ if(firstCmndArg === "spotify-this-song") {
 	});
 }
 
-else if(firstCmndArg === "spotify-this-song" && secondCmndArg === null){
+else if(firstCmndArg === "spotify-this-song" && secondCmndArg === undefined){
+
+	var newSpotify = require("spotify");
+
+	console.log("this works");
 
 	secondCmndArg = "The Sign";
 
-	Spotify.search({type: "track", query: secondCmndArg}, function(error, data){
+	newSpotify.search({type: "track", query: secondCmndArg}, function(error, resp){
 
 		if(error){
 			console.log(error);
 		}
 
-		for(var spotProp in data) {
-			console.log("Artist: " + data.tracks.items[0].artists[0].name);
-			console.log("Song: " + data.tracks.items[0].name);
-			console.log("Link: " + data.tracks.items[0].preview_url);
-			console.log("Album: " + data.tracks.items[0].album.name);
+		for(var spotProperty in resp) {
+			console.log("Artist: " + resp.tracks.items[2].artists[0].name);
+			console.log("Song: " + resp.tracks.items[2].name);
+			console.log("Link: " + resp.tracks.items[2].preview_url);
+			console.log("Album: " + resp.tracks.items[2].album.name);
 		}
 	});
 }
