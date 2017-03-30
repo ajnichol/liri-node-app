@@ -21,7 +21,7 @@ if(firstCmndArg === "my-tweets") {
 	  }
 
 	  for(var twitProp in tweets){
-	  		console.log(tweets[twitProp].created_at + " " + tweets[twitProp].text);
+	  		console.log(tweets[twitProp].text + " " + tweets[twitProp].created_at);
 		}
 
 	});
@@ -38,12 +38,11 @@ else if(firstCmndArg === "spotify-this-song" && secondCmndArg !== undefined) {
 			console.log(error);
 		}
 
-		for(var spotProp in data) {
-			console.log("Artist: " + data.tracks.items[0].artists[0].name);
-			console.log("Song: " + data.tracks.items[0].name);
-			console.log("Link: " + data.tracks.items[0].preview_url);
-			console.log("Album: " + data.tracks.items[0].album.name);
-		}
+		console.log("Artist: " + data.tracks.items[0].artists[0].name);
+		console.log("Song: " + data.tracks.items[0].name);
+		console.log("Link: " + data.tracks.items[0].preview_url);
+		console.log("Album: " + data.tracks.items[0].album.name);
+		
 	});
 }
 
@@ -52,19 +51,50 @@ else if(firstCmndArg === "spotify-this-song" && secondCmndArg === undefined){
 	var newSpotify = require("spotify");
 
 	secondCmndArg = "The Sign";
-	//new spotify server search if user doesn't specify a song
+	//new spotify server search if user doesn't choose a song
 	newSpotify.search({type: "track", query: secondCmndArg}, function(error, resp){
 
 		if(error){
 			console.log(error);
 		}
 
-		for(var spotProperty in resp) {
-			console.log("Artist: " + resp.tracks.items[2].artists[0].name);
-			console.log("Song: " + resp.tracks.items[2].name);
-			console.log("Link: " + resp.tracks.items[2].preview_url);
-			console.log("Album: " + resp.tracks.items[2].album.name);
+		console.log("Artist: " + resp.tracks.items[2].artists[0].name);
+		console.log("Song: " + resp.tracks.items[2].name);
+		console.log("Link: " + resp.tracks.items[2].preview_url);
+		console.log("Album: " + resp.tracks.items[2].album.name);
+		
+	});
+}
+
+////////////////////////////////////////////read file///////////////////////////////////////////////////////
+else if(firstCmndArg === "do-what-it-says" && secondCmndArg === undefined){
+
+	var fileSystem = require("fs");
+
+	fileSystem.readFile("random.txt", "utf8", function(error, data){
+
+		var readSpotify = require("spotify");
+
+		if(error){
+			console.log(error);
 		}
+
+		var dataArr = data.split(",");
+
+		secondCmndArg = dataArr[1];
+
+		readSpotify.search({type: "track", query: secondCmndArg}, function(err, resp){
+
+			if(err){
+				console.log(err);
+			}
+			
+			console.log("Artist: " + resp.tracks.items[0].artists[0].name);
+			console.log("Song: " + resp.tracks.items[0].name);
+			console.log("Link: " + resp.tracks.items[0].preview_url);
+			console.log("Album: " + resp.tracks.items[0].album.name);
+			
+		});
 	});
 }
 
@@ -115,8 +145,4 @@ else if(firstCmndArg === "this-movie" && secondCmndArg !== undefined) {
 	});
 }
 
-
-// else{
-// 	console.log("WRONG INPUT");
-// }
 
