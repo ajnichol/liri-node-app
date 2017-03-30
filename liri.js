@@ -1,4 +1,3 @@
-//dont forget to request omdb!!!
 
 var keysExport = require("./keys.js");
 
@@ -10,6 +9,7 @@ var firstCmndArg = process.argv[2];
 
 var secondCmndArg = process.argv[3];
 
+//////////////////////////////////////////////twitter/////////////////////////////
 if(firstCmndArg === "my-tweets") {
 
 	var params = {screen_name: 'AlexnBtcmp'};
@@ -27,10 +27,11 @@ if(firstCmndArg === "my-tweets") {
 	});
 }
 
-if(firstCmndArg === "spotify-this-song" && secondCmndArg !== undefined) {
+////////////////////////////////////////Spotify/////////////////////////////////////
+else if(firstCmndArg === "spotify-this-song" && secondCmndArg !== undefined) {
 
 	var Spotify = require("spotify");
-	//Spotify request
+	//Spotify server search
 	Spotify.search({type: "track", query: secondCmndArg}, function(error, data){
 
 		if(error){
@@ -50,10 +51,8 @@ else if(firstCmndArg === "spotify-this-song" && secondCmndArg === undefined){
 
 	var newSpotify = require("spotify");
 
-	console.log("this works");
-
 	secondCmndArg = "The Sign";
-
+	//new spotify server search if user doesn't specify a song
 	newSpotify.search({type: "track", query: secondCmndArg}, function(error, resp){
 
 		if(error){
@@ -68,6 +67,54 @@ else if(firstCmndArg === "spotify-this-song" && secondCmndArg === undefined){
 		}
 	});
 }
+
+/////////////////////////////////////////////OMDB//////////////////////////////////////
+else if(firstCmndArg === "this-movie" && secondCmndArg !== undefined) {
+
+	var request = require("request");
+
+	request("http://www.omdbapi.com/?t=" + secondCmndArg + "&y=&plot=short&r=json", function(error, resp, body){
+
+		if(error){
+			console.log(error);
+		}
+
+		var newBody = JSON.parse(body);
+
+		console.log("Title: " + newBody.Title);
+		console.log("Director: " + newBody.Director);
+		console.log("Release Date: " + newBody.Released);
+		console.log("IMDB Rating: " + newBody.imdbRating);
+		console.log("Country: " + newBody.Country);
+		console.log("Language: " + newBody.Language);
+		console.log("Plot: " + newBody.Plot);
+		console.log("Actors: " + newBody.Actors);
+		console.log(newBody.Ratings[1].Source + ": " + newBody.Ratings[1].Value);
+		console.log("Website: " + newBody.Website);
+		
+	});
+}else{
+	request("http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&r=json", function(err, reply, bod) {
+
+		if(err){
+			console.log(err);
+		}
+
+		var content = JSON.parse(bod);
+
+		console.log("Title: " + content.Title);
+		console.log("Director: " + content.Director);
+		console.log("Release Date: " + content.Released);
+		console.log("IMDB Rating: " + content.imdbRating);
+		console.log("Country: " + content.Country);
+		console.log("Language: " + content.Language);
+		console.log("Plot: " + content.Plot);
+		console.log("Actors: " + content.Actors);
+		console.log(content.Ratings[1].Source + ": " + content.Ratings[1].Value);
+		console.log("Website: " + content.Website);
+	});
+}
+
 
 // else{
 // 	console.log("WRONG INPUT");
