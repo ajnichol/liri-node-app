@@ -14,13 +14,23 @@ if(firstCmndArg === "my-tweets") {
 	var params = {screen_name: 'AlexnBtcmp'};
 	//Twitter request
 	keysData.get('statuses/user_timeline', params, function(error, tweets, response) {
+
 		//if there is an error from our request, log it
 	  if (error) {
 	    console.log(error);
 	  }
 	  //loop through our object from twitter and get the values of text and date
 	  for(var twitProp in tweets){
+
+	  		var appendTweets = require("fs");
+
 	  		console.log(tweets[twitProp].text + " " + tweets[twitProp].created_at);
+
+	  		appendTweets.appendFile("log.txt", tweets[twitProp].text + " " + tweets[twitProp].created_at, function(err){
+	  			if(err){
+	  				console.log(err);
+	  			}
+	  		});
 		}
 
 	});
@@ -33,6 +43,8 @@ else if(firstCmndArg === "spotify-this-song" && secondCmndArg !== undefined) {
 	var Spotify = require("spotify");
 	//Spotify server search
 	Spotify.search({type: "track", query: secondCmndArg}, function(error, data){
+
+		var appendSpotify = require("fs");
 		//if there is any error, log the error
 		if(error){
 			console.log(error);
@@ -42,6 +54,17 @@ else if(firstCmndArg === "spotify-this-song" && secondCmndArg !== undefined) {
 		console.log("Song: " + data.tracks.items[0].name);
 		console.log("Link: " + data.tracks.items[0].preview_url);
 		console.log("Album: " + data.tracks.items[0].album.name);
+
+		var artist = data.tracks.items[0].artists[0].name;
+		var song = data.tracks.items[0].name;
+		var link = data.tracks.items[0].preview_url;
+		var album = data.tracks.items[0].album.name;
+
+		appendSpotify.appendFile("log.txt", "Artist: " + artist + ", " + "Song: " + song + ", " +"Link: " + link + ", " + "Album: " + album, function(error){
+			if(error){
+				console.log(error);
+			}
+		});
 		
 	});
 }
@@ -53,6 +76,8 @@ else if(firstCmndArg === "spotify-this-song" && secondCmndArg === undefined){
 	secondCmndArg = "The Sign";
 	//new spotify server search if user doesn't choose a song
 	newSpotify.search({type: "track", query: secondCmndArg}, function(error, resp){
+
+		var appendAce = require("fs");
 		//if there is an error, log the error
 		if(error){
 			console.log(error);
@@ -62,6 +87,17 @@ else if(firstCmndArg === "spotify-this-song" && secondCmndArg === undefined){
 		console.log("Song: " + resp.tracks.items[2].name);
 		console.log("Link: " + resp.tracks.items[2].preview_url);
 		console.log("Album: " + resp.tracks.items[2].album.name);
+
+		var newArtist = resp.tracks.items[2].artists[0].name;
+		var newSong = resp.tracks.items[2].name;
+		var newLink = resp.tracks.items[2].preview_url;
+		var newAlbum = resp.tracks.items[2].album.name;
+
+		appendAce.appendFile("log.txt", "Artist: " + newArtist + ", " + "Song: " + newSong + ", " + "Link: " + newLink + ", " + "Album: " + newAlbum, function(error){
+			if(error){
+				console.log(error);
+			}
+		});
 		
 	});
 }
@@ -106,6 +142,8 @@ else if(firstCmndArg === "this-movie" && secondCmndArg !== undefined) {
 	var request = require("request");
 	//make a request to omdb api to retrieve movie data
 	request("http://www.omdbapi.com/?t=" + secondCmndArg + "&y=&plot=short&r=json", function(error, resp, body){
+
+		var appendMovie = require("fs");
 		//if there is an error with the request we log the error
 		if(error){
 			console.log(error);
@@ -123,11 +161,31 @@ else if(firstCmndArg === "this-movie" && secondCmndArg !== undefined) {
 		console.log("Actors: " + newBody.Actors);
 		console.log(newBody.Ratings[1].Source + ": " + newBody.Ratings[1].Value);
 		console.log("Website: " + newBody.Website);
+
+		var title = newBody.Title;
+		var director = newBody.Director;
+		var releaseDate = newBody.Released;
+		var movieRating = newBody.imdbRating
+		var country = newBody.Country;
+		var language = newBody.Language;
+		var plot = newBody.Plot;
+		var actors = newBody.Actors;
+		var rotten = newBody.Ratings[1].Value;
+		var website = newBody.Website;
+
+		appendMovie.appendFile("log.txt", "Title: " + title + ", " + "Director: " + director + ", " + "Release Date: " + releaseDate + ", " + "IMDB Rating: " + movieRating + ", " + "Country: " + country + ", " + "Language: " + language + ", " + "Plot: " + plot + ", " + "Actors: " + actors + ", " + "Rotten Tomatoes Rating: " + rotten + ", " + "Website: " + website, function(err){
+			if(error){
+				console.log(error);
+			}
+		})
 		
 	});
 }else{
+	var newRequest = require("request");
 	//else if none of our conditions are met above show our user the movie information to mr nobody (which i havent seen)
-	request("http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&r=json", function(err, reply, bod) {
+	newRequest("http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&r=json", function(err, reply, bod) {
+
+		var appendDefault = require("fs");
 		//if there is an error we log the error
 		if(err){
 			console.log(err);
@@ -145,6 +203,23 @@ else if(firstCmndArg === "this-movie" && secondCmndArg !== undefined) {
 		console.log("Actors: " + content.Actors);
 		console.log(content.Ratings[1].Source + ": " + content.Ratings[1].Value);
 		console.log("Website: " + content.Website);
+
+		var newTitle = content.Title;
+		var newDirector = content.Director;
+		var newReleaseDate = content.Released;
+		var newMovieRating = content.imdbRating
+		var newCountry = content.Country;
+		var newLanguage = content.Language;
+		var newPlot = content.Plot;
+		var newActors = content.Actors;
+		var newRotten = content.Ratings[1].Value;
+		var newWebsite = content.Website;
+
+		appendDefault.appendFile("log.txt", "Title: " + newTitle + ", " + "Director: " + newDirector + ", " + "Release Date: " + newReleaseDate + ", " + "IMDB Rating: " + newMovieRating + ", " + "Country: " + newCountry + ", " + "Language: " + newLanguage + ", " + "Plot: " + newPlot + ", " + "Actors: " + newActors + ", " + "Rotten Tomatoes Rating: " + newRotten + ", " + "Website: " + newWebsite, function(error){
+			if(error){
+				console.log(error);
+			}
+		})		
 	});
 }
 
